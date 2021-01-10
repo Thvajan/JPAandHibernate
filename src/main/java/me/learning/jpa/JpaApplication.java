@@ -51,7 +51,9 @@ public class JpaApplication implements CommandLineRunner {
 		Employee employee2 = new PartTimeEmployee("SadaaShiv", BigDecimal.valueOf(70));
 		employeeRepository.insertEmployee(employee1);
 		employeeRepository.insertEmployee(employee2);
-		log.info("getAllEmployees:-> {}", employeeRepository.getAllEmployees());
+//		log.info("getAllEmployees:-> {}", employeeRepository.getAllEmployees());
+		log.info("getAllEmployees:-> {}", employeeRepository.getAllPartTimeEmployees());
+		log.info("getAllEmployees:-> {}", employeeRepository.getAllFullTimeEmployees());
 	}
 
 }
