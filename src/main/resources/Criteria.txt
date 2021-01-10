@@ -1,0 +1,16 @@
+Building query using Java
+
+Steps:
+1. Use Criteria Builder to create a Criteria Query returning the expected result object
+	Criteria Builder - to create "where" or "from" CriteriaBuilder is req
+	CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+	CriteriaQuery<Course> criteriaQuery = criteriaBuilder.createQuery(Course.class);
+
+2. Define Roots for tables which are involved in the query
+	Root<Course> root = criteriaQuery.from(Course.class);
+	
+3. Define Predicates etc using CriteriaBuilder
+
+4. Add Predicates etc to criteriaQuery
+
+5. Build the Typed Query using the entity Manager and CriteriaQuery

@@ -17,7 +17,7 @@ import me.learning.jpa.entity.Course;
 import me.learning.jpa.entity.Student;
 
 @SpringBootTest(classes = JpaApplication.class)
-public class JPQLRepositoryTest {
+public class JPQLTest {
 
 	@Autowired
 	private EntityManager em;

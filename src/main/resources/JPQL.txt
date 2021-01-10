@@ -1,2 +1,8 @@
 em.createQuery("Select c from Course c where c.students is empty");
 em.createQuery("Select c from Course c where size(c.students) >=2");
+em.createQuery("Select s from Student s where s.passport.number like '%234%32'")
+
+Joins:
+Join - em.createQuery("Select c,s from Course c JOIN c.students s");
+Left Join - em.createQuery("Select c,s from Course c left join c.students s");
+Cross Join - em.createQuery("Select c,s from Course c , Student s");
