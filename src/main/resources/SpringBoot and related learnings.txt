@@ -1,0 +1,6 @@
+Spring Initializr - https://start.spring.io/
+h2database - http://localhost:8080/h2-consolepackage me.learning.myspring5WebApp.domain;
+Commandline runner - runs everytime spring context loads
+crudrepository - springdatarepo
+sl4g logmanager by default for loggin gin spring boot
+log4j 2 can be a good addition - loggerfactory 

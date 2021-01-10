@@ -1,0 +1,41 @@
+Before boot one needed to decide:
+	every dependency\framework and manage version for databind, validation, web or not....
+	exception handling
+	full spring config file with
+		comp scan
+		view resolver
+		Message source
+		locale resolver
+		web.xml
+		.....
+		
+
+Use Spring Initializr
+
+Core of Spring framework : 
+	Dependency Injection & IOC - to create loosly coupled applications
+		1. Defining beans and Annotating them
+		2. Autowiring required dependencies
+		3. Enable Component scan in a given package
+		
+	Allows easy testing: Mockito, Junit
+	Removes Plumbing\Boilerplate code
+	Allows good integration
+	
+Spring MVC is concerned with developing Web applications\ Rest services
+	Seperation of concerns:
+		Dispatcher Server
+		Model and view
+		View Resolver
+		
+Spring Boot gives all as pre-configured in Spring Boot starter web and Spring boot starter Security.
+	1. SpringBoot Auto Config
+	2. SpringBoot Starter projects to solve well know patterns
+		Actuator
+		Logging
+		Log4j2
+		undertow, Tomcat
+	
+	
+spring-boot-starter-web: Preffered for web applications\ Rest services
+spring-boot-starter-Actuator: Read meta about applications like beans configured

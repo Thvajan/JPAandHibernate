@@ -1,0 +1,126 @@
+Ways to write queries in JPA when required:
+1. JPQL - Queries using Java entities
+2. Criteria - using Java API
+3. Native query directly
+
+
+Using h2 for JDBC vs Spring JPA lesson:
+
+App.prop
+	spring.h2.console.enabled=true
+	spring.datasource.url=jdbc:h2:mem:<db_name>
+Goto: http://localhost:8080/h2-console/
+
+Creating data.sql in resources folder
+
+Spring JDBC reduces the no. of lines of code compared to nomal JDBC where we do everything manually (create a connection & statement, create query , map the resultset, close connection & statement and handle exception)
+
+
+Junits:
+@SpringBootTest(classes = JpaApplication.class)
+@Test
+@BeforeClass
+@Before
+@AfterClass
+@After
+@dirtiescontext(If the test method changes data in db, it will reset the changes done in the method)
+
+JPA:
+JPA allows ORMs to map tables and relations to java entities
+In Entity Class:
+	If table name is same as entity class name, @table is not required
+	If column name is same as attribute field name, @column is not required
+	No Args constructor required
+	When using in memory DB Spring automatically triggers Schema update to create all defined entities
+spring.jpa.showsql=true
+get Entity Manager from @PersistantContext
+entityManager.merge(Obj1) - does Save or Update
+entityManager.persist(Obj1) - saves entity
+entityManager.remove(Obj1) - does delete
+entityManager.flush() - Sends all changes tracked by EM to DB
+entityManager.detach(Obj1) - stops tracking changes done to this obj in this transaction
+entityManager.clear()  - stops tracking changes done to all objs in this transaction
+entityManager.refresh(Obj1)  
+	- contents of Obj1 are refreshed(fetched from DB). hence any changes that are pending post the last flush will be lost 
+	  and the obj1 is replaced with data current from DB
+em.createQuery("Select c from Course c", Course.class) - Typed Queries
+@NamedQueries(value = { @NamedQuery(name = "get_all_courses", query = "Select c from Course c"),
+		@NamedQuery(name = "get_test_course", query = "Select c from Course c where c.name like '%JPA'") })
+@OneToOne(mappedBy="variable name as in owning entity") - mappedBy is given in the non-owning side of the Bi-directional relationship
+@onetoMany,ManytoMany fetch type is lazy by default
+@manytoone,OneToOne fetch type is eager by default
+
+To persist a One to many relationship between 2 entities: Ex: Course & Review
+	1. Persist the One to many side entity. 
+			Ex: em.persist(courseObj)
+	2. For each many to one side entity, Assign One to many side entity inside it and Add it to the list in the One to many side entity.
+			Ex: reviewObj1.setcourseObj; reviewObj2.setcourseObj; courseObj.setcourseObjtoList(reviewObjlist)
+	3. Persist the One to many side entity. 
+			Ex: em.persist(courseObj)
+
+To persist a Many to many relationship between 2 entities: Ex: Student & Course
+	1. Persist the individual entities. Ex: em.persist(studentObj) && em.persist(courseObj)
+	2. Assign each entity inside the other. Ex: studentObj.setstudentObjtoList && courseObj.setcourseObjtoList
+	3. Persist the owning side entity again. Ex. em.persist(studentObj) (assuming student entity owns the relationship i.e., mappedby is in course entoty class)
+	
+	
+Hibernate:
+@table - Used to map entity to table by name. Required If table and entity have different names
+@column - Used to map entity attribute to table column by name. Required If table column and entity attribute have different names
+@column(nullable = false)
+@UpdateTimestamp
+@CreationTimestamp
+
+In a transaction, if em.flush() is called at a line, and an exception occurs and the transaction method end is not reached, hibernate will rollback all the flushed changes from the DB too.
+
+
+
+Inheritance Heirarchies and Mappings:
+Ex: Employee -> Full Time Employee
+			|-> Part Time Employee
+			
+Ways to acheive using JPA:
+	1. Single Table
+	2. Table per Class
+	3. Joined
+	4. Mapped Super Class
+
+1. Single Table:
+	All information related to all subtypes are stored in the same table
+	@Inheritance - class level annotation. Default strategy value = InheritanceType.SINGEL_TABLE -> in Superclass
+	@DiscriminatorColumn(name="User defined name")
+	Single table gets created, with DType(as in Distinguisher Type) auto created by JPA which supports the values of the child class names
+	Single query fired by JPA to get all employees of all types - Good performance
+	Not good DB design
+		I. Multiple nullable fields are req as each type needs to set null values for columns of other type(s) 
+		II. Also, it can allow column null values for req records like setting full time employee with null for salary column
+	
+2. Table per Class:
+	A Table per concrete entity(Specialized\sub classes) gets created
+	@Inheritance - class level annotation. strategy value = InheritanceType.TABLE_PER_CLASS -> in Superclass
+	Creates tables only for the subtypes - FullTime_Employee and PartTime_Employee
+	A union query is fired by JPA to get all employees of all types:
+	  select employee0_.id as id1_1_, employee0_.name as name2_1_, employee0_.salary as salary1_2_, employee0_.hourly_wage as hourly_w1_3_, employee0_.clazz_ as clazz_ 
+		from (select id, name, salary, null as hourly_wage, 1 as clazz_ 
+			from
+				full_time_employee 
+			union
+			all select id, name, null as salary, hourly_wage, 2 as clazz_ 
+			from
+				part_time_employee 
+		) employee0_
+	Table per concrete class is good as it is easy to insert and good in performance
+	Not good DB design:
+		Common cloumns like name and age(super class cloumns) are repeated in all sub class tables
+
+3. Joined
+	A Table per concrete entity(Specialized\sub classes) and one for the super class gets created
+	@Inheritance - class level annotation. strategy value = InheritanceType.JOINED -> in Superclass
+	Creates tables for the super and subtypes - Employeem, FullTime_Employee and PartTime_Employee
+	Common columns will be put into the Superclass table - Employee
+	Join is used to fetch all data across required tables.
+	Good DB Design as these are indvidual tables with foreign key connections
+	Poor Performance on querying as it requires multiple joins
+	
+4. Mapped Super Class
+	An @Entity cannot be a @MappedSuperclass
