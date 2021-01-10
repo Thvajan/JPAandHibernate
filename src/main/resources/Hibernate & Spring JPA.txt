@@ -72,3 +72,12 @@ Hibernate:
 @CreationTimestamp
 
 In a transaction, if em.flush() is called at a line, and an exception occurs and the transaction method end is not reached, hibernate will rollback all the flushed changes from the DB too.
+
+@Transactional:
+	JPA @Transactional:
+		- Good for maintaining a transaction including\using only one DB at a time
+	SpringBoot  @Transactional:
+		- Good for maintaining a transaction that can span across many DBs or MQs
+		- Provides a way to define Isolation Levels(DEFAULT, READ_COMMITTED, READ_UNCOMMITTED, REPEATABLE_READ, SERIALIZABLE) for every transaction
+		- Can be set in global level for all application transactions in app.properties:
+			spring.jpa.properties.hibernate.connection.isolation=2 (as per Connection.class)
