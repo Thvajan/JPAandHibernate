@@ -1,0 +1,20 @@
+*SDJPA - Spring Data JPA
+spring-boot-starter-data-jpa --> Brings Spring JPA, Hibernate & Spring Data JPA
+Spring Data JPA is an abstraction over Spring JPA.
+Let's us avoid writing same repository methods like find\persist..., with just entity class change for every entity.
+
+To utilize the features of SDJPA:
+
+public interface <RepoName> extends JpaRepository<<EntityName>, <Entity Primary Key type>> {
+
+}
+
+Optional:
+	1. repository.findById(10001L);
+	2. JpaRepository returns Optional object
+	3. Optional provides a way to check such a record exists or not
+	4. Eliminates need to check null value
+	
+
+Spring Data JPA supports various repository methods and interfaces.
+CRUDRepository and PagingAndSortingRepository are most used.

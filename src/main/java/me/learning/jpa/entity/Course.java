@@ -53,8 +53,13 @@ public class Course {
 		this.name = name;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
+	}
+	
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public LocalDateTime getCreatedDate() {
