@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Sort;
 
 import me.learning.jpa.JpaApplication;
 import me.learning.jpa.entity.Course;
@@ -37,12 +38,14 @@ public class CourseSpringDataRepositoryTest {
 	}
 
 	@Test
-	void playingWithSpringDataRepository() {
+	public void playingWithSpringDataRepository() {
 //		Course course = new Course("Primitive Survival Skils");
 //		repository.save(course);
 //		course.setName("Primitive Survival Skils - Updated");
 //		repository.save(course);
 		log.info("Courses -> {}", repository.findAll());
-		log.info("Count ", repository.count());
+		log.info("Count " + repository.count());
+		log.info("Courses Sort desc-> {}", repository.findAll(Sort.by(Sort.Direction.DESC, "name")));
+//		log.info("Courses Sort desc-> {}", repository.findAll(Sort.by(Sort.Direction.DESC, "name").and(Sort.by(Sort.Direction.DESC, "age"))));
 	}
 }

@@ -18,3 +18,5 @@ Optional:
 
 Spring Data JPA supports various repository methods and interfaces.
 CRUDRepository and PagingAndSortingRepository are most used.
+repository.findAll();
+repository.count()
