@@ -10,6 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import me.learning.jpa.JpaApplication;
@@ -48,4 +51,17 @@ public class CourseSpringDataRepositoryTest {
 		log.info("Courses Sort desc-> {}", repository.findAll(Sort.by(Sort.Direction.DESC, "name")));
 //		log.info("Courses Sort desc-> {}", repository.findAll(Sort.by(Sort.Direction.DESC, "name").and(Sort.by(Sort.Direction.DESC, "age"))));
 	}
+	
+	
+	@Test
+	public void paginationDataJPATest() {
+		PageRequest pageRequest = PageRequest.of(0, 3);
+		Page<Course> page1 = repository.findAll(pageRequest);
+		log.info("First Page -> {}", page1.getContent());
+		Pageable pageable = page1.nextPageable();
+		Page<Course> page2 = repository.findAll(pageable);
+		log.info("Second Page -> {}", page2.getContent());
+//		log.info("Courses Sort desc-> {}", repository.findAll(Sort.by(Sort.Direction.DESC, "name").and(Sort.by(Sort.Direction.DESC, "age"))));
+	}
+	
 }
